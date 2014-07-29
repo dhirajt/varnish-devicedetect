@@ -39,12 +39,7 @@ sub devicedetect {
 		/* If the cookie header is now empty, or just whitespace, unset it. */
 		if (req.http.Cookie ~ "^ *$") { unset req.http.Cookie; }
 	} else {
-		if (req.http.User-Agent ~ "(?i)(ads|google|bing|msn|yandex|baidu|ro|career|)bot" ||
-		    req.http.User-Agent ~ "(?i)(baidu|jike|symantec)spider" ||
-		    req.http.User-Agent ~ "(?i)scanner" ||
-		    req.http.User-Agent ~ "(?i)(web)crawler") {
-			set req.http.X-UA-Device = "bot"; }
-		elsif (req.http.User-Agent ~ "(?i)ipad")        { set req.http.X-UA-Device = "tablet-ipad"; }
+		if (req.http.User-Agent ~ "(?i)ipad")        { set req.http.X-UA-Device = "tablet-ipad"; }
 		elsif (req.http.User-Agent ~ "(?i)ip(hone|od)") { set req.http.X-UA-Device = "mobile-iphone"; }
 		/* how do we differ between an android phone and an android tablet?
 		   http://stackoverflow.com/questions/5341637/how-do-detect-android-tablets-in-general-useragent */
@@ -96,5 +91,10 @@ sub devicedetect {
 		    req.http.User-Agent ~ "(?i)avantgo") {
 			set req.http.X-UA-Device = "mobile-generic";
 		}
+		if (req.http.User-Agent ~ "(?i)(ads|google|bing|msn|yandex|baidu|ro|career|)bot" ||
+		    req.http.User-Agent ~ "(?i)(baidu|jike|symantec)spider" ||
+		    req.http.User-Agent ~ "(?i)scanner" ||
+		    req.http.User-Agent ~ "(?i)(web)crawler") {
+			set req.http.X-UA-Device = "bot: " + req.http.X-UA-Device; }
 	}
 }
